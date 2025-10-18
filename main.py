@@ -40,6 +40,8 @@ def process_day_token():
     summary = processDayToken(token,
                               f"_data\\entries\\{today}.txt")
 
+    summary = summary.replace("\n","<br>")
+    
     return summary
 
 
