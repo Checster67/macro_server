@@ -1,5 +1,6 @@
 import os
 import datetime
+from datetime import datetime
 
 def checkDir(path):
     if not os.path.exists(path): 
@@ -22,7 +23,7 @@ def addIngredient(label,carb,prot,fat,kcals):
 
 
 def getDate():
-    current_date = datetime.datetime.now()
+    current_date = datetime.now()
     formatted_date = current_date.strftime("%d-%m-%Y")
     return formatted_date
 
@@ -55,7 +56,7 @@ def logWeight(token):
     token = float(token)
 
     with open("_data\\weights.txt","a") as file:
-        file.write(f"{date}       -        {token} kg\n")
+        file.write(f"{date}\t/\t{token} kg\n")
 
 
 def processDayToken(token,file):
@@ -109,6 +110,56 @@ def processDayToken(token,file):
 
 
 
+def getWeightInsight(data: str, start_date: str = None):
+    '''
+    @GPT-5
+    Calculates average weight change per day and per week.
+    Optionally starts from a specified date (DD-MM-YYYY).
+    '''
+    # split lines and filter out empty ones
+    lines = [line.strip() for line in data.strip().splitlines() if line.strip()]
+    
+    # parse date and weight into tuples
+    records = []
+    for line in lines:
+        date_str, weight_str = line.split('/')
+        date = datetime.strptime(date_str.strip(), "%d-%m-%Y")
+        weight = float(weight_str.replace("kg", "").strip())
+        records.append((date, weight))
+    
+    # sort by date (in case it's not ordered)
+    records.sort(key=lambda x: x[0])
+    
+    # apply start date filter if provided
+    if start_date:
+        start_dt = datetime.strptime(start_date, "%d-%m-%Y")
+        records = [r for r in records if r[0] >= start_dt]
+    
+    if len(records) < 2:
+        raise ValueError("Not enough valid data points after applying start date.")
+    
+    # calculate total weight gain and total days
+    total_days = (records[-1][0] - records[0][0]).days
+    total_gain = records[-1][1] - records[0][1]
+    
+    # average per day and per week
+    avg_per_day = total_gain / total_days if total_days > 0 else 0
+    avg_per_week = avg_per_day * 7
+
+    # print summary
+    '''
+    print(f"Data range: {records[0][0].strftime('%d-%m-%Y')} to {records[-1][0].strftime('%d-%m-%Y')}")
+    print(f"Total change: {total_gain:.2f} kg over {total_days} days")
+    print(f"Average weight change per day: {avg_per_day:.3f} kg/day")
+    print(f"Average weight change per week: {avg_per_week:.3f} kg/week")
+    '''
+
+    return {
+        "total_days": total_days,
+        "total_change": total_gain,
+        "avg_per_day": avg_per_day,
+        "avg_per_week": avg_per_week
+    }
 
 
 

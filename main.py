@@ -46,6 +46,29 @@ def log_weight():
 
 
 
+@app.route('/macro/weight-info')
+def weight_info():
+    try:
+        token = request.args["token"]
+    except:
+        token = None
+    
+    with open("_data\\weights.txt","r") as file:
+        text = file.read()
+
+    answer = getWeightInsight(text,token)
+
+    answer = f'''
+    TOTAL DAYS-------{round(answer["total_days"],4)} days<br>
+    TOTAL CHANGE-----{round(answer["total_change"],4)} kg<br>
+    AVG PER DAY------{round(answer["avg_per_day"],4)} kg/day<br>
+    AVG PER WEEK-----{round(answer["avg_per_week"],4)} kg/week<br>
+    '''
+    
+    return answer
+
+
+
 @app.route('/macro/process-day-token')
 def process_day_token():
     today = getDate()
