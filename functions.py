@@ -55,7 +55,7 @@ def logWeight(token):
     token = float(token)
 
     with open("_data\\weights.txt","a") as file:
-        file.write(f"{date} ---------- {token} kg\n")
+        file.write(f"{date}       -        {token} kg\n")
 
 
 def processDayToken(token,file):
