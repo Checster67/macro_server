@@ -74,16 +74,23 @@ def processDayToken(token,file):
     for tok in token:
         t = tok.split("-")
 
-        label = t[0].replace(" ","_").upper()
+        label = t[0].strip().replace(" ","_").upper()
 
-        # we divide by 100 here since we specify every per 100g
-        # mass here is therefore a factor, not an absolute mass 
-        mass = float(t[1])/100
-        
-        carb = mass*dict_[label]["carb"]
-        prot = mass*dict_[label]["prot"]
-        fat = mass*dict_[label]["fat"]
-        kcals = mass*dict_[label]["kcals"]
+        if label == "MANUAL":
+            macros = t[1].strip().split("_")
+            carb = float(macros[0])
+            prot = float(macros[1])
+            fat = float(macros[2])
+            kcals = float(macros[3])
+        else:
+            # we divide by 100 here since we specify every per 100g
+            # mass here is therefore a factor, not an absolute mass 
+            mass = float(t[1])/100
+            
+            carb = mass*dict_[label]["carb"]
+            prot = mass*dict_[label]["prot"]
+            fat = mass*dict_[label]["fat"]
+            kcals = mass*dict_[label]["kcals"]
 
         summary = summary + f"{t[0]} -- {carb} -- {prot} -- {fat} -- {kcals}\n"
 
@@ -91,8 +98,6 @@ def processDayToken(token,file):
         entry["prot"]+=prot
         entry["fat"]+=fat
         entry["kcals"]+=kcals
-
-
 
     summary = summary + "\n\n"
     summary = summary + f"TOTAL ---> {entry['carb']} -- {entry['prot']} -- {entry['fat']} -- {entry['kcals']}\n"
