@@ -4,9 +4,6 @@ from functions import *
 # Initialize Flask app
 app = Flask(__name__)
 
-checkDir("_data")
-checkDir("_data\\entries")
-checkFile("_data\\ingredients.txt")
 
 @app.route('/')
 def home():
@@ -18,6 +15,11 @@ def home():
 
 # MACRO CALCULATOR 
 # -------------------------------------------------
+checkDir("_data")
+checkDir("_data\\entries")
+checkFile("_data\\ingredients.txt")
+checkFile("_data\\weights.txt")
+
 @app.route('/macro/add')
 def add_ingredient():
     token = request.args["token"]
@@ -30,7 +32,21 @@ def add_ingredient():
     return f"Added! {token}"
 
 
-@app.route('/macro/process_day_token')
+@app.route('/macro/log-weight')
+def log_weight():
+    token = request.args["token"]
+    logWeight(token)
+
+    with open("_data\\weights.txt","r") as file:
+        text = file.read()
+
+    text = text.replace("\n","<br>")
+
+    return text 
+
+
+
+@app.route('/macro/process-day-token')
 def process_day_token():
     today = getDate()
     checkFile(f"_data\\entries\\{today}.txt")

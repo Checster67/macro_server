@@ -50,6 +50,14 @@ def getIngredients():
     return dict_
 
 
+def logWeight(token):
+    date = getDate()
+    token = float(token)
+
+    with open("_data\\weights.txt","a") as file:
+        file.write(f"{date} ---------- {token} kg\n")
+
+
 def processDayToken(token,file):
     '''
     example token: cottage cheese-200,bread marron-40,tuna-155,honey-10
