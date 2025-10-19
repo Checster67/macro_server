@@ -32,6 +32,20 @@ def add_ingredient():
     return f"Added! {token}"
 
 
+@app.route('/macro/show-ingredients')
+def show_ingredients():
+    ingredients = open(INGREDIENTS_FILE,"r").read()
+    ingredients = ingredients.replace("\n","<br>")
+    return ingredients
+
+
+@app.route('/macro/show-weights')
+def show_weights():
+    weights = open(WEIGHTS_FILE,"r").read()
+    weights = weights.replace("\n","<br>")
+    return weights
+
+
 @app.route('/macro/log-weight')
 def log_weight():
     token = request.args["token"]
