@@ -15,10 +15,10 @@ def home():
 
 # MACRO CALCULATOR 
 # -------------------------------------------------
-checkDir("_data")
-checkDir("_data\\entries")
-checkFile("_data\\ingredients.txt")
-checkFile("_data\\weights.txt")
+checkDir(DATA_DIR)
+checkDir(ENTRIES_DIR)
+checkFile(INGREDIENTS_FILE)
+checkFile(WEIGHTS_FILE)
 
 @app.route('/macro/add')
 def add_ingredient():
@@ -68,20 +68,14 @@ def weight_info():
     return answer
 
 
-
 @app.route('/macro/process-day-token')
 def process_day_token():
     today = getDate()
-    checkFile(f"_data\\entries\\{today}.txt")
-
+    daily_file = os.path.join(ENTRIES_DIR, f"{today}.txt")
+    checkFile(daily_file)
     token = request.args["token"]
-
-    summary = processDayToken(token,
-                              f"_data\\entries\\{today}.txt")
-
-    summary = summary.replace("\n","<br>")
-    
-    return summary
+    summary = processDayToken(token, daily_file)
+    return summary.replace("\n", "<br>")
 
 
 

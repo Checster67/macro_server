@@ -2,6 +2,13 @@ import os
 import datetime
 from datetime import datetime
 
+# base directory for data
+DATA_DIR = os.path.join(os.getcwd(), "_data")
+ENTRIES_DIR = os.path.join(DATA_DIR, "entries")
+INGREDIENTS_FILE = os.path.join(DATA_DIR, "ingredients.txt")
+WEIGHTS_FILE = os.path.join(DATA_DIR, "weights.txt")
+
+
 def checkDir(path):
     if not os.path.exists(path): 
         os.makedirs(path)
@@ -13,12 +20,10 @@ def checkFile(path):
             file.write("")
 
 
-def addIngredient(label,carb,prot,fat,kcals):
-    '''
-    amounts should be specified per 100 of the ingredient
-    '''
-    with open("_data\\ingredients.txt","a") as file:
-        label = label.replace(" ","_")
+def addIngredient(label, carb, prot, fat, kcals):
+    """Amounts should be specified per 100 g of the ingredient"""
+    with open(INGREDIENTS_FILE, "a") as file:
+        label = label.replace(" ", "_")
         file.write(f"{label.upper()}-{carb}-{prot}-{fat}-{kcals}\n")
 
 
@@ -32,7 +37,7 @@ def getKals(c,p,f):
     return c*4+p*4+f*9
 
 def getIngredients():
-    with open("_data\\ingredients.txt","r") as file:
+    with open(INGREDIENTS_FILE,"r") as file:
         text = file.read()
     text = text.split("\n")
 
@@ -55,7 +60,7 @@ def logWeight(token):
     date = getDate()
     token = float(token)
 
-    with open("_data\\weights.txt","a") as file:
+    with open(WEIGHTS_FILE,"a") as file:
         file.write(f"{date}\t/\t{token} kg\n")
 
 
