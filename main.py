@@ -51,7 +51,7 @@ def log_weight():
     token = request.args["token"]
     logWeight(token)
 
-    with open("_data\\weights.txt","r") as file:
+    with open(WEIGHTS_FILE,"r") as file:
         text = file.read()
 
     text = text.replace("\n","<br>")
@@ -67,7 +67,7 @@ def weight_info():
     except:
         token = None
     
-    with open("_data\\weights.txt","r") as file:
+    with open(WEIGHTS_FILE,"r") as file:
         text = file.read()
 
     answer = getWeightInsight(text,token)
